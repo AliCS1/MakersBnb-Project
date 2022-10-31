@@ -8,6 +8,7 @@ Thomas Bull
 Yaser Hussain
 
 User Stories:
+<<<<<<< HEAD
 
 
 
@@ -62,3 +63,6 @@ I want to only book my space to one person.
 
 As a user,
 I want to keep track of when my space is booked in a database.
+=======
+Test by Mikkel
+>>>>>>> 118a5582d4edc3a20ac9d2d1595837a6020ab33e

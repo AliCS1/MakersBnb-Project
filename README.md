@@ -7,8 +7,10 @@ Mikkel Allison
 Thomas Bull
 Yaser Hussain
 
+
+Test by Mikkel
+
 User Stories:
-<<<<<<< HEAD
 
 
 
@@ -20,7 +22,7 @@ I want to enter my email, username, password to sign up
 
 I want to be able to enter a password (8 characters minimum, special character, numbers etc)
 
-I want to be able to login 
+I want to be able to login
 
 Store data in the Users database
 
@@ -63,6 +65,3 @@ I want to only book my space to one person.
 
 As a user,
 I want to keep track of when my space is booked in a database.
-=======
-Test by Mikkel
->>>>>>> 118a5582d4edc3a20ac9d2d1595837a6020ab33e

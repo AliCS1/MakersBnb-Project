@@ -16,9 +16,14 @@ class Application < Sinatra::Base
   end
 
   get '/' do
-
     return erb(:index)
   end
+
+  get '/new_space' do
+    return erb(:new_space)
+  end
+
+
   #test to see all the users displayed
   get '/users' do
     repo = UserRepository.new

@@ -63,4 +63,24 @@ describe Application do
     
   end
 
+  context 'POST /login' do
+    it 'checks if user logs in' do
+      response = post('/login',email:'ABC@gmail.com', password:'MyPassword123')
+
+
+      expect(response.body).to eq("SUCCESSFULLY LOGGED IN ABC@gmail.com")
+
+    end
+    it 'given incorrect password' do
+      response = post('/login',email:'ABC@gmail.com', password:'MyPassword123')
+
+
+      expect(response.body).to eq("BAD PASSWORD")
+
+    end
+
+
+
+  end
+
 end

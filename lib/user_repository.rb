@@ -51,7 +51,19 @@ class UserRepository
     user.password_1 = result_set[0]['password_1']
 
     return user
-end
+    end
 
+    def check_if_exists(email,password)
+    sql = 'SELECT id, email, password_1 FROM users WHERE email = $1 and password_1 = $2;'
+    result_set = DatabaseConnection.exec_params(sql, [email, password])
     
+    begin
+        user = User.new
+        user.id = result_set[0]['id']
+        return true
+    rescue
+        return false
+    end
+
+    end
 end

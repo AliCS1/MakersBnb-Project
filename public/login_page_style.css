@@ -1,0 +1,46 @@
+.Wrapper {
+
+    display:flex;
+    flex-direction: column;
+    align-items:center
+}
+
+.Header {
+
+    width:50%;
+    display:flex;
+    justify-content:space-between;
+}
+
+.Logo {
+
+    margin-top:auto; 
+    margin-bottom:auto;
+}
+
+.Links {
+
+    display:flex; 
+    gap:20px;
+}
+
+.Login-Wrapper {
+    width:50%; 
+    padding-top:5%; 
+    padding-bottom:5%; 
+    border: 2px solid black; 
+    display:flex; 
+    flex-direction:column;
+    justify-content:center;
+}
+
+.Login-Content {
+    margin-left:auto; 
+    margin-right:auto;
+}
+
+.Login-Button {
+    padding:10px; 
+    display:flex; 
+    justify-content:center;
+}

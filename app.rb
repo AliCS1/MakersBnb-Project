@@ -9,9 +9,11 @@ class Application < Sinatra::Base
   end
 
   get '/' do
-
     return erb(:index)
+  end
 
+  get '/new_space' do
+    return erb(:new_space)
+  end
 
   end
-end

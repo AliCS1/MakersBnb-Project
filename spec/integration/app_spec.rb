@@ -17,7 +17,7 @@ describe Application do
         expect(response.status).to eq 200
 
         expect(response.body).to include('<form method = "POST" action = "/signup" style="margin: auto; width: 35%; text-align: center; border: 1 black; background-color: gray;">')
-        expect(response.body).to include('<input type = "text" name = "email" />')
+        expect(response.body).to include('<input type = "text" value="" name="email"/>')
         expect(response.body).to include('<input type = "password" name = "password_1" />')
         expect(response.body).to include('<input type = "password" name = "password_2" />')
     end
@@ -72,10 +72,10 @@ describe Application do
 
     end
     it 'given incorrect password' do
-      response = post('/login',email:'ABC@gmail.com', password:'MyPassword123')
+      response = post('/login',email:'ABC@gmail.com', password:'MyPassword123!')
 
 
-      expect(response.body).to eq("BAD PASSWORD")
+      expect(response.body).to eq("BAD PASSWORD OR EMAIL")
 
     end
 

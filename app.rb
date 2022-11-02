@@ -23,6 +23,16 @@ class Application < Sinatra::Base
     return erb(:new_space)
   end
 
+  post '/new_space' do
+    name = params[:fname]
+    description = params[:description]
+    price_per_night = params[:price_per_night]
+    available_from = params[:date_from]
+    available_to = params[:date_to]
+
+    return name + description + price_per_night + available_from + available_to
+  end
+
 
   #test to see all the users displayed
   get '/users' do
@@ -46,7 +56,7 @@ class Application < Sinatra::Base
     @errors = invalid_user_signup
     @emails = params[:email]
     if(@errors.length > 0)
-      status 200
+      status 400
       return erb(:signup)
     end
     @display = ''

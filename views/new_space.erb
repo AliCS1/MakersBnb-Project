@@ -7,7 +7,8 @@
     <title>MakersBnb</title>
     <meta name="description" content="Our first page">
     <meta name="keywords" content="html tutorial template">
-    <link ref="stylesheet" href="/style.css" />
+    <link href="/style.css" rel="stylesheet"/>
+
     </head>
 
 <body>
@@ -17,7 +18,7 @@
     </div>
 
     <div>
-        <form action="/action_page.php">
+        <form method='POST' action='/new_space'>
             <p><label for="fname">Name</label></p>
             <input type="text" id="fname" name="fname">
             <br><br>
@@ -27,7 +28,7 @@
             <br>
 
             <p><label for="Price_per_night">Price per night (£)</label></p>
-            <input type="text" id="Price_per_night" name="fname" value="£">
+            <input type="text" id="Price_per_night" name="price_per_night" value="£">
             <br><br>
 
             <p><label for="Available_from">Available from (DD/MM/YY)</label></p>

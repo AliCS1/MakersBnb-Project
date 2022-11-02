@@ -2,6 +2,7 @@ require 'sinatra'
 require "sinatra/reloader"
 require_relative 'lib/database_connection'
 require_relative 'lib/user_repository'
+require_relative 'lib/spaces_repository'
 
 
 
@@ -24,13 +25,27 @@ class Application < Sinatra::Base
   end
 
   post '/new_space' do
-    name = params[:fname]
-    description = params[:description]
-    price_per_night = params[:price_per_night]
-    available_from = params[:date_from]
-    available_to = params[:date_to]
 
-    return name + description + price_per_night + available_from + available_to
+
+    space = Space.new
+    
+    session[:user_id] = 2
+
+    if defined?(session[:user_id]) == nil 
+      space.user_id = session[:user_id]
+    else
+      space.user_id = 1
+    end
+
+    space.name = params[:fname]
+    space.description = params[:description]
+    space.price = params[:price_per_night]
+    space.available_from = params[:date_from]
+    space.available_to = params[:date_to]
+
+    repo = SpaceRepository.new
+    repo.create(space)
+
   end
 
 

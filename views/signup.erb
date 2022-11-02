@@ -1,0 +1,40 @@
+<html>
+  <title>Signup to MakersBnB</title>
+   <head>
+      <div>
+        <a href="/login">
+          Login
+        </a>
+      </div>
+      <h1 style = "text-align: center;">
+      Feet at home, anywhere
+      </h1>
+   </head>
+  <body>
+    <h2 style = "text-align: center;">
+    Sign up to MakersBnB
+    </h2>
+   <form method = "POST" action = "/signup" style="margin: auto; width: 35%; text-align: center; border: 1 black; background-color: gray;">
+   <div>
+     <label>Please enter your email</label>
+     <input type = "text" name = "email" /> 
+   </div>
+   <div>
+     <label>Please enter your password</label>
+     <input type = "password" name = "password_1" />
+   </div>
+   <div>
+     <label>Please verify your password</label>
+     <input type = "password" name = "password_2" />
+   </div>
+   <div>
+     <input type = "submit" value = "Submit"/>
+   </div>
+   <div>
+     <p>
+       <%= @display %>
+     </p>
+   </div>
+  </form>
+  </body>
+</html>

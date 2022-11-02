@@ -14,10 +14,18 @@
     <h2 style = "text-align: center;">
     Sign up to MakersBnB
     </h2>
+    <div style="border: red 2px solid; margin: auto; width: 35%; text-align: center; border: 1 black; background-color: red;  margin-bottom:1%;">
+
+    <% @errors.each do |message| %>
+      <p><%=message %> </p>
+
+      <% end %>
+
+    </div>
    <form method = "POST" action = "/signup" style="margin: auto; width: 35%; text-align: center; border: 1 black; background-color: gray;">
    <div>
      <label>Please enter your email</label>
-     <input type = "text" name = "email" /> 
+     <input type = "text" value="<%=@emails%>" name="email"/> 
    </div>
    <div>
      <label>Please enter your password</label>

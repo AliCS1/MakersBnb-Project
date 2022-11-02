@@ -29,13 +29,17 @@ class Application < Sinatra::Base
   end
 
   get '/signup' do
+    @errors = []
+    @emails = ""
     return erb(:signup)
   end
 
   post '/signup' do
-    if(invalid_user_signup == true)
-      status 400
-      return ''
+    @errors = invalid_user_signup
+    @emails = params[:email]
+    if(@errors.length > 0)
+      status 200
+      return erb(:signup)
     end
     @display = ''
   
@@ -69,29 +73,41 @@ class Application < Sinatra::Base
 
 
   def invalid_user_signup
+    errors = []
     repo = UserRepository.new
     user_email = params[:email]
+    mistake = false
     #checking if any input fields are empty
-    if(params[:password_1] == '' || params[:password_2] == '' || params[:email] == '')
-      return true
+    if (params[:password_1] == '' || params[:password_2] == '' || params[:email] == '')
+      errors.push("One of your fields is empty!")
+      mistake = true
+    end
     #checking if the passwords match
-    elsif(params[:password_1] != params[:password_2])
-      return true
+    if(params[:password_1] != params[:password_2])
+      errors.push("Your passwords dont match!")
+      mistake = true
+    end
       #checking the length is over 8 characters
-    elsif(params[:password_1].length < 8)
-      return true
+    if(params[:password_1].length < 8)
+      errors.push("Your password is less than 8 characters")
+      mistake = true
+    end
       #checking there are capital letters
-    elsif(valid_password_case == false)
-      return true
+    if(valid_password_case == false)
+      errors.push("You didn't add a capital letter")
+      mistake = true
+
+    end
       #checking there are special characters
-    elsif(valid_password_symbols == false)
-      return true
+    if(valid_password_symbols == false)
+      errors.push("You didn't add a special character")
+      mistake = true
+
+    end
       #checking if the email is in use
     #elsif(email_in_use == true)
     #  return true
-    else 
-      return false
-    end
+    return errors
 
   end
 

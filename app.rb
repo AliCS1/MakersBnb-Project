@@ -3,8 +3,11 @@ require "sinatra/reloader"
 require_relative 'lib/database_connection'
 require_relative 'lib/user_repository'
 
-#DatabaseConnection.connect('makersBnB_test')
+
+
+
 enable :sessions
+
 
 class Application < Sinatra::Base
   configure :development do
@@ -44,8 +47,9 @@ class Application < Sinatra::Base
     new_user.email = params[:email]
     new_user.password_1 = params[:password_1]
     repo.create(new_user)
-
+    
     session[:user_id] = new_user.id
+    session[:email] = new_user.email
     return redirect('/users')
     @display = 'Your account has been created!'
   end
@@ -57,12 +61,18 @@ class Application < Sinatra::Base
   end
 
   post '/login' do
-    @email = params[:email]
-    @password = params[:password]
+    email = params[:email]
+    password = params[:password]
 
-    return 'You submitted ' + email + " with password " + password
+    if valid_login_attempt(email,password)
+      user = find_email(email)
+      session[:user_id] = user.id
+      session[:email] = user.email
+      return "SUCCESSFULLY LOGGED IN "+session[:email]
+    else
+    return 'BAD PASSWORD OR EMAIL'
 
-
+    end
 
   end
 
@@ -119,15 +129,36 @@ class Application < Sinatra::Base
     return false
   end
 
-  def email_in_use
+  def email_in_use(email)
     repo = UserRepository.new
-    valid = repo.find_email(params[:email])
+    valid = repo.find_email(email)
 
-    if(valid == params[:email])
+    if(valid.email == email)
       return false
     else
       return true
     end
   end
+
+  def valid_email_entered(email)
+    #email needs an '@' and a dot in order to be valid
+    if email.contains("@") == false
+      return false
+    end
+  end
+
+  def valid_login_attempt(email,password)
+    repo = UserRepository.new
+    return repo.check_if_exists(email,password)
+    
+  end
+
+  def find_email(email)
+    repo = UserRepository.new
+    return repo.find_email(email)
+
+
+  end
+
 
 end

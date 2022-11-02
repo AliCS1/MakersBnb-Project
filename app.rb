@@ -3,7 +3,7 @@ require "sinatra/reloader"
 require_relative 'lib/database_connection'
 require_relative 'lib/user_repository'
 
-DatabaseConnection.connect('makersBnB_test')
+#DatabaseConnection.connect('makersBnB_test')
 enable :sessions
 
 class Application < Sinatra::Base
@@ -48,6 +48,22 @@ class Application < Sinatra::Base
     session[:user_id] = new_user.id
     return redirect('/users')
     @display = 'Your account has been created!'
+  end
+
+  get '/login' do
+
+    return erb(:login_page)
+
+  end
+
+  post '/login' do
+    @email = params[:email]
+    @password = params[:password]
+
+    return 'You submitted ' + email + " with password " + password
+
+
+
   end
 
 

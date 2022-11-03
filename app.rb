@@ -6,7 +6,16 @@ require_relative 'lib/spaces_repository'
 
 
 
-
+#<% @description.each do |space| %>
+#  <a href="/spaces/<%=@id[@description.find_index(space)]%>>
+#  <h3>
+#  <%=@name[@description.find_index(space)]%>
+#  </h3>
+#  <h4>
+#  <%=space%>
+#  </h4>
+#  </a>
+#  <%end%>
 
 
 
@@ -19,22 +28,38 @@ class Application < Sinatra::Base
 
   get '/' do
     repo = SpaceRepository.new
-    spaces = repo.available_spaces('2021-01-01', '2024-02-01')
-     spaces
-
-    @name = spaces.map do |property| 
-      property.name
+    if session[:starting_date] == nil
+      session[:starting_date] = '2022-01-01'
+      session[:ending_date] = '2023-01-01'
     end
+    spaces = repo.available_spaces(session[:starting_date], session[:ending_date])
+    #p spaces
+    @list_of_spaces = []
 
-    p @name
+    spaces.each { |space|
+      current_space = Space.new
 
-    @id = spaces.map do |property| 
-      property.id
-    end
+      current_space.id = space.id
+      current_space.name = space.name
+      current_space.description = space.description
+      current_space.price = space.price
 
-    @description = spaces.map do |property| 
-      property.description
-    end
+      @list_of_spaces << current_space
+
+
+    }
+
+    #@name = spaces.map do |property| 
+    #  property.name
+    #end
+
+    #@id = spaces.map do |property| 
+    #  property.id
+    #end
+
+    #@description = spaces.map do |property| 
+    #  property.description
+    #end
 
     # session[:available_listings] = spaces
 
@@ -43,10 +68,13 @@ class Application < Sinatra::Base
   end
 
   post '/' do
-    repo = SpaceRepository.new
-    spaces = repo.available_spaces(params[:date_from], params[:date_to])
+    
+    session[:starting_date] = params[:date_from]
+    session[:endng_date] = params[:date_to]
 
-    session[:available_listings] = spaces
+    return redirect("/")
+
+
   end
 
   get '/new_space' do

@@ -22,12 +22,12 @@
 <h2 style = 'text-align:center'>BOOK A SPACE</h2>
 
 <div style = 'text-align:center'>
-<a href="/new_space">List a Space</a>
+<a href="/new_space">Create a new Space</a>
 </div>
 
 <form method = 'POST' action = '/'> 
 
-<div style = 'text-align:center;'>
+<div style = 'display:flex; padding: 30px 30px; margin: 0% 5%'>
 <div style = 'width:50%;float:left;'>
 <p><label for="Available_from">Available from (DD/MM/YY)</label></p>
 <input type="date" id="Available_from" name="date_from" >
@@ -36,24 +36,37 @@
 <p><label for="Available_to">Available to (DD/MM/YY)</label></p>
 <input type="date" id="Available_to" name="date_to">
 </div>
+
+<div style = 'display:flex;justify-content:center;'>
+<div style="margin:auto;">
+
+<input type = 'submit' value = 'list spaces'></div>
+</div>
 </div>
 
-<div style = 'text-align:center;'>
-<input type = 'submit' value = 'list spaces'>
-</div>
 </form>
 
-<div>
-        <% @description.each do |space| %>
-            <a href="/spaces/<%=@id[@description.find_index(space)]%>>
-            <h3>
-            <%=@name[@description.find_index(space)]%>
-            </h3>
-            <h4>
-            <%=space%>
-            </h4>
-            </a>
-            <%end%>
+<div style="margin: 0% 5%; border: 2px solid black; display:flex; flex-direction:column; gap:50px; padding: 20px;">
+        <%@list_of_spaces.each do |space| %>
+
+        <a href="/spaces/<%=space.id%>">
+        <div style="border: black 2px solid; display:flex; flex-direction:column;">
+        <div>
+      
+        <h2>Name: <%=space.name%></h2>
+        </div>
+        <div>
+      
+        <h2>Description: <%=space.description%></h2>
+        </div>
+
+        <h2>Price: £<%=space.price%></h2>
+
+
+        </div>
+        </a>
+
+        <%end%>
 </div>
 
 </body>

@@ -7,17 +7,46 @@ require_relative 'lib/spaces_repository'
 
 
 
-enable :sessions
+
 
 
 class Application < Sinatra::Base
   configure :development do
+    enable :sessions
     register Sinatra::Reloader
     also_reload 'lib/user_repository'
   end
 
   get '/' do
+    repo = SpaceRepository.new
+    spaces = repo.available_spaces('2021-01-01', '2024-02-01')
+     spaces
+
+    @name = spaces.map do |property| 
+      property.name
+    end
+
+    p @name
+
+    @id = spaces.map do |property| 
+      property.id
+    end
+
+    @description = spaces.map do |property| 
+      property.description
+    end
+
+    # session[:available_listings] = spaces
+
+    # @listings = session[:available_listings]
     return erb(:index)
+  end
+
+  post '/' do
+    repo = SpaceRepository.new
+    spaces = repo.available_spaces(params[:date_from], params[:date_to])
+
+    session[:available_listings] = spaces
   end
 
   get '/new_space' do

@@ -1,14 +1,15 @@
 class UserBooking
-    attr_reader :booking_id, :spaces_id, users_id:, confirmed:, booking_date:  # :space_location
+    attr_reader :id, :space_id, user_id:, confirmed:, booking_start:, booking_end:  # :space_location
 
-    def initialize(booking_id:, spaces_id:, users_id:, confirmed:, booking_date:) # add location?
-        @booking_id = booking_id
-        @spaces_id = spaces_id
-        @users_id = users_id
+    def initialize(id:, space_id:, user_id:, confirmed:, booking_start:, booking_end:) # add location?
+        @id = id
+        @space_id = spaces_id
+        @user_id = users_id
         @confirmed = confirmed
-        @booking_date
+        @booking_start = booking_start
+        @booking_end = booking_end
         # @space_location = space_location
-    end
+    endß
 
     result = DatabaseConnection.query(
         SELECT *

@@ -3,6 +3,7 @@ require "sinatra/reloader"
 require_relative 'lib/database_connection'
 require_relative 'lib/user_repository'
 require_relative 'lib/spaces_repository'
+require_relative 'lib/booking_repository'
 
 
 
@@ -34,6 +35,7 @@ class Application < Sinatra::Base
     end
     spaces = repo.available_spaces(session[:starting_date], session[:ending_date])
     #p spaces
+    @current_email = session[:user_id]
     @list_of_spaces = []
 
     spaces.each { |space|
@@ -76,6 +78,51 @@ class Application < Sinatra::Base
 
 
   end
+
+  get '/spaces/:id' do
+  repo = SpaceRepository.new
+  space = repo.find(params[:id])
+  session[:space_id] = params[:id]
+
+  @name = space.name
+  @description = space.description
+  @price = space.price
+
+  @current_user = session[:user_id]
+
+  return erb(:listing)
+end
+
+post '/spaces/:id' do
+  repo = BookingRepository.new
+  booking = Booking.new
+  if(session[:user_id] == nil)
+    return redirect('/login')
+  end
+
+  booking.users_id = session[:user_id]
+  booking.spaces_id = session[:space_id]
+  booking.confirmed = false
+  booking.booking_date = params[:date]
+
+  repo.create(booking)
+
+  return redirect('/booking_confirm')
+end
+
+get '/booking_confirm' do
+  repo = SpaceRepository.new
+  space = repo.find(session[:space_id])
+
+  @name = space.name
+  
+  return erb(:confirmation)
+end
+
+post '/booking_confirm' do
+  return redirect('/')
+end
+
 
   get '/new_space' do
     return erb(:new_space)
@@ -141,7 +188,7 @@ class Application < Sinatra::Base
     
     session[:user_id] = new_user.id
     session[:email] = new_user.email
-    return redirect('/users')
+    return redirect('/')
     @display = 'Your account has been created!'
   end
 
@@ -159,7 +206,8 @@ class Application < Sinatra::Base
       user = find_email(email)
       session[:user_id] = user.id
       session[:email] = user.email
-      return "SUCCESSFULLY LOGGED IN "+session[:email]
+      #return "SUCCESSFULLY LOGGED IN "+session[:email]
+      return redirect('/')
     else
     return 'BAD PASSWORD OR EMAIL'
 

@@ -1,0 +1,12 @@
+<h1><%=@current_user%></h1>
+
+<h2><%=@description%></h2>
+<h2><%=@price%></h2>
+<form method='POST' action='/spaces/:id'>
+<div style = 'width:50%;float:left;'>
+<p><label for="Available_from">Choose your date (DD/MM/YY)</label></p>
+<input type="date" name="date" >
+</div>
+<input type = 'submit' value = 'Request to rent'></div>
+
+</form>

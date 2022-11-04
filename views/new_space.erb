@@ -12,12 +12,20 @@
     </head>
 
 <body>
-    <div class="new_space_header">
-        <h1>List a Space</h1>
-        <p> orem Ipsum is simply dummy text of the ons of Lorem Ipsum. </p>
+    <div class="nav-bar">
+        <nav>
+            <a href="/about"> About </a>
+            <a href="/signup"> Sign Up </a>
+        </nav>
     </div>
 
-    <div>
+
+    <div class="new-space-header">
+        <h1>List a Space</h1>
+        <p> Complete the form below, to list your space! </p>
+    </div>
+
+    <div class="new-space-form">
         <form method='POST' action='/new_space'>
             <p><label for="fname">Name</label></p>
             <input type="text" id="fname" name="fname">
@@ -39,13 +47,14 @@
             <input type="date" id="Available_to" name="date_to">
             <br><br>
 
-            <input type="submit" value="List My Space">
+            <div class="list-my-space-bttn">
+                <input type="submit" value="List My Space">
+            </div>
         </form>
     </div>
 
 
 
-    
 
 </body>
 

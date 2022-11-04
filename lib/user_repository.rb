@@ -42,6 +42,7 @@ class UserRepository
     end
 
     def find_email(email)
+    #similar to the find method, however it uses the email instead of id
     sql = 'SELECT id, email, password_1 FROM users WHERE email = $1;'
     result_set = DatabaseConnection.exec_params(sql, [email])
 
@@ -54,6 +55,7 @@ class UserRepository
     end
 
     def check_if_exists(email,password)
+    #checks if the email and password exist (valid login)
     sql = 'SELECT id, email, password_1 FROM users WHERE email = $1 and password_1 = $2;'
     result_set = DatabaseConnection.exec_params(sql, [email, password])
     

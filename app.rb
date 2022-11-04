@@ -29,15 +29,21 @@ class Application < Sinatra::Base
 
   get '/' do
     repo = SpaceRepository.new
+    #checks if the session starting date contains a value - if not the two date sessions are assigned a 
+    #value so the search below can take place
     if session[:starting_date] == nil
       session[:starting_date] = '2022-01-01'
       session[:ending_date] = '2023-01-01'
     end
+    #The search takes place using the two sessions as parameters
     spaces = repo.available_spaces(session[:starting_date], session[:ending_date])
-    #p spaces
-    @current_email = session[:user_id]
+    #to display the user id to know if the user is logged in
+    @current_email = session[:email]
+    #creating an empty array that will later contain all of the spaces
     @list_of_spaces = []
 
+    #going into the searched query (line 39) and putting the contents of the search into the list
+    #list of spaces is now an array, with each index containing one property object
     spaces.each { |space|
       current_space = Space.new
 
@@ -50,6 +56,13 @@ class Application < Sinatra::Base
 
 
     }
+
+    if (session[:user_id]) == nil
+      #if the user isnt logged in, signout is false as we want to login
+      @signout = false
+    else 
+      @signout = true
+    end
 
     #@name = spaces.map do |property| 
     #  property.name
@@ -70,9 +83,11 @@ class Application < Sinatra::Base
   end
 
   post '/' do
+    #here we are changing the session dates to equal ones that the user has selected
     
     session[:starting_date] = params[:date_from]
     session[:endng_date] = params[:date_to]
+    #refreshing the page
 
     return redirect("/")
 
@@ -81,14 +96,18 @@ class Application < Sinatra::Base
 
   get '/spaces/:id' do
   repo = SpaceRepository.new
+  #using the find method to find the space which is equal to the id the user selected
   space = repo.find(params[:id])
+  #saving the id as a session variable
   session[:space_id] = params[:id]
+
+  #uploading the name, description and price as variables that the erb file can read and display
 
   @name = space.name
   @description = space.description
   @price = space.price
 
-  @current_user = session[:user_id]
+  @current_user = session[:email]
 
   return erb(:listing)
 end
@@ -96,30 +115,34 @@ end
 post '/spaces/:id' do
   repo = BookingRepository.new
   booking = Booking.new
+  #ensuring the user is logged in, if not redirecting them to the login page
   if(session[:user_id] == nil)
     return redirect('/login')
   end
 
+  #making a booking by filling it with attributes
   booking.users_id = session[:user_id]
   booking.spaces_id = session[:space_id]
   booking.confirmed = false
   booking.booking_date = params[:date]
-
+  #using the create method to insert data into the booking table
   repo.create(booking)
-
+  #directing the user to the confirmation page
   return redirect('/booking_confirm')
 end
 
 get '/booking_confirm' do
   repo = SpaceRepository.new
   space = repo.find(session[:space_id])
-
+  #displaying the name of the space they have requested to book
   @name = space.name
   
   return erb(:confirmation)
 end
 
 post '/booking_confirm' do
+  #when they press this button to confirm they have acknowledged their booking is confirmed
+  #they get redirected to the home page
   return redirect('/')
 end
 
@@ -134,6 +157,8 @@ end
     space = Space.new
     
     session[:user_id] = 2
+    #checking if a user is logged in,
+    #if not assigning them an id of 1
 
     if defined?(session[:user_id]) == nil 
       space.user_id = session[:user_id]
@@ -141,12 +166,13 @@ end
       space.user_id = 1
     end
 
+    #filling space with attributes from the html form
     space.name = params[:fname]
     space.description = params[:description]
     space.price = params[:price_per_night]
     space.available_from = params[:date_from]
     space.available_to = params[:date_to]
-
+    #using the create method to insert data into the spaces table
     repo = SpaceRepository.new
     repo.create(space)
 
@@ -155,6 +181,7 @@ end
 
   #test to see all the users displayed
   get '/users' do
+    #this is not used - this was purely to see all of the users
     repo = UserRepository.new
     users = repo.all
 
@@ -166,30 +193,34 @@ end
   end
 
   get '/signup' do
+    #errors is an array filled with any errors the user has when signing up
     @errors = []
     @emails = ""
     return erb(:signup)
   end
 
   post '/signup' do
+    #populate errors with the invalid user signup method
     @errors = invalid_user_signup
     @emails = params[:email]
+    #if there are errors then the code wont work
     if(@errors.length > 0)
       status 400
       return erb(:signup)
     end
-    @display = ''
-  
+    
+    #filling up a user with attributes
     repo = UserRepository.new
     new_user = User.new
     new_user.email = params[:email]
     new_user.password_1 = params[:password_1]
+    #using the create method to insert data into the users database
     repo.create(new_user)
     
+    #storing the user id and email as sessions
     session[:user_id] = new_user.id
     session[:email] = new_user.email
     return redirect('/')
-    @display = 'Your account has been created!'
   end
 
   get '/login' do
@@ -201,7 +232,7 @@ end
   post '/login' do
     email = params[:email]
     password = params[:password]
-
+    # if the login was successful
     if valid_login_attempt(email,password)
       user = find_email(email)
       session[:user_id] = user.id
@@ -213,6 +244,27 @@ end
 
     end
 
+  end
+
+  get '/signout' do
+    #checking if the user is signed in before
+    if(session[:user_id]) == nil
+      @email = 'Please login before attempting to signout'
+    else
+      @id = session[:user_id]
+      @email = session[:email]
+    end
+    
+    return erb(:signout)
+  end
+
+  post '/signout' do
+    #make the session id and email equal nothing
+    session[:user_id] = nil
+    session[:user_email] = nil
+    #return the user to the homepage
+
+    return redirect('/')
   end
 
 
@@ -257,10 +309,12 @@ end
   end
 
   def valid_password_symbols
+    #checks if the password contains at least one symbol
     special = "?<>',!£€?[]}{=-)(*&^%$#`~{}"
     array = params[:password_1].split(//)
 
     array.each do |character|
+      #instantly when a symbol is found then true is returned
       if(special.include?(character))
         return true
       end
@@ -271,7 +325,7 @@ end
 
   def valid_password_case
     array = params[:password_1].split(//)
-
+    #instantly when a capital letter is found, true is returned
     array.each do |character|
       if(character == character.upcase)
         return true
@@ -280,7 +334,8 @@ end
     return false
   end
 
-  def email_in_use(email)
+  def email_in_use(email) 
+    #checks if the email entered already exists within the database
     repo = UserRepository.new
     valid = repo.find_email(email)
 
@@ -299,6 +354,7 @@ end
   end
 
   def valid_login_attempt(email,password)
+    #checks if the password and email exist in the users table
     repo = UserRepository.new
     return repo.check_if_exists(email,password)
     

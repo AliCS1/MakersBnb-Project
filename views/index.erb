@@ -3,7 +3,7 @@
 <head>
 <title>MakersBnb</title>
 <div style = 'text-align:right'>
-<h1><%=@current_email%></h1>
+<h1>Hello: <%=@current_email%></h1>
 <a href="/" style = 'margin-right:10px'>
   Spaces
 </a>
@@ -11,10 +11,16 @@
 <a href="/" style = 'margin-right:10px'>
   Requests
   </a>
-
-<a href="/" >
-  Sign Out
+<%if(@signout == true) %>
+<a href="/signout" >
+Sign Out
 </a>
+<%else%>
+<a href="/login" >
+Login
+</a>
+<%end%>
+
 
 </div>
 </head>

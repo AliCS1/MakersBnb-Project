@@ -1,9 +1,39 @@
 <!doctype html>
 <html>
 <head>
-<title>MakersBnb</title>
-<div style = 'text-align:right'>
-<h1>Hello: <%=@current_email%></h1>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MakersBnB</title>
+    <link href="/index_style.css" rel="stylesheet"/>
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+<div class="Header">
+    <div class="Logo">
+        <a href="/">
+        LOGO
+        </a>
+    </div>
+        <div class="Links">
+          <a href="/"> Spaces </a>
+          <a href="/"> Requests </a>
+          <%if @signout%>
+          <a href="/signout"> Sign Out </a>
+          <%else%>
+          <a href="/login"> Login </a>
+          <a href="/signup"> Sign Up </a>
+          <%end%>
+        
+        </div>
+</div>
+
+
+
+
+<!-- 
+
 <a href="/" style = 'margin-right:10px'>
   Spaces
 </a>
@@ -19,12 +49,12 @@ Sign Out
 <a href="/login" >
 Login
 </a>
-<%end%>
+<%end%>-->
 
 
+<div style = 'text-align:right'>
+<h1>Hello: <%=@current_email%></h1>
 </div>
-</head>
-<body>
 
 <h2 style = 'text-align:center'>BOOK A SPACE</h2>
 

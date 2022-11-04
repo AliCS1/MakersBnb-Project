@@ -148,6 +148,9 @@ end
 
 
   get '/new_space' do
+    if session[:user_id] == nil
+      return redirect('/login')
+    end
     return erb(:new_space)
   end
 
@@ -225,7 +228,7 @@ end
 
   get '/login' do
 
-    return erb(:login_page)
+    return erb(:login)
 
   end
 

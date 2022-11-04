@@ -42,6 +42,7 @@ class SpaceRepository
         new_space = Space.new
         new_space.id = result_set[0]['id'].to_i
         new_space.name = result_set[0]['name']
+        new_space.description = result_set[0]['description']
         new_space.price = result_set[0]['price']
         new_space.user_id = result_set[0]['user_id']
         new_space.available_from = result_set[0]['available_from']
@@ -51,6 +52,7 @@ class SpaceRepository
     end
 
     def available_spaces(date1, date2)
+        #checks which spaces are available between two dates
         spaces = []
         sql = 'SELECT id, name, description, price, user_id, available_from, available_to FROM spaces WHERE available_to < $2 AND available_from >= $1;'
         result_set = DatabaseConnection.exec_params(sql, [date1, date2])

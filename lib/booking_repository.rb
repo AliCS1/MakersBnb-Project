@@ -26,6 +26,7 @@ class BookingRepository
     
     
     def create(booking)
+        #insert data into bookings table
         sql = "INSERT INTO bookings (spaces_id, users_id, confirmed, booking_date) VALUES ($1, $2, $3, $4);"
         result_set = DatabaseConnection.exec_params(sql, [booking.spaces_id, booking.users_id, booking.confirmed, booking.booking_date])
 
